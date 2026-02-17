@@ -1,36 +1,36 @@
 import { mkdirSync, existsSync } from "fs";
 import { execSync } from "child_process";
 
-const VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // "Rachel" - warm, narrative voice
+const VOICE_ID = "ErXwobaYiN019PkySvjV"; // "Antoni" - confident, energetic male voice
 
 const SCENES = [
   {
     id: "01-title",
-    text: "Disney and Pixar. A story of magic and innovation.",
+    text: "What happens when a garage dream meets cutting-edge technology? You get the greatest animation empire the world has ever seen. This is Disney and Pixar.",
   },
   {
     id: "02-walt-disney",
-    text: "In 1923, Walt Disney founded The Disney Brothers Studio in a small Hollywood garage. From those humble beginnings, he set out to change entertainment forever.",
+    text: "1923. A young Walt Disney opens a tiny studio in a Hollywood garage. No budget. No backing. Just a wild belief that drawings could make the world feel something. And he was absolutely right.",
   },
   {
     id: "03-pixar-origins",
-    text: "In 1986, Steve Jobs acquired Pixar from Lucasfilm's computer graphics division. The tiny studio had a bold mission: to revolutionize animation through technology.",
+    text: "Fast forward to 1986. Steve Jobs bets big, buying Pixar from Lucasfilm's computer graphics division. A scrappy team of engineers and artists with one audacious goal: blow up everything we know about animation.",
   },
   {
     id: "04-toy-story",
-    text: "In 1995, Toy Story became the first fully computer-animated feature film. It proved that CGI could tell heartwarming stories and launched an entirely new era of filmmaking.",
+    text: "Then 1995 hits, and everything changes. Toy Story drops as the first fully computer-animated feature film ever made. Critics love it. Audiences lose their minds. A brand new era of filmmaking is born.",
   },
   {
     id: "05-golden-era",
-    text: "Then came hit after hit. Finding Nemo. The Incredibles. Ratatouille. WALL-E. Up. A golden era of storytelling.",
+    text: "And they just kept winning. Finding Nemo. The Incredibles. Ratatouille. WALL-E. Up. Banger after banger. A golden era that nobody could touch.",
   },
   {
     id: "06-merger",
-    text: "In 2006, Disney acquired Pixar for seven point four billion dollars, uniting two animation powerhouses into one.",
+    text: "2006. Disney makes the power move, acquiring Pixar for seven point four billion dollars. Two animation giants, now one unstoppable force.",
   },
   {
     id: "07-legacy",
-    text: "Together, they have won 23 Academy Awards, produced over 28 feature films, and earned more than 19 billion dollars. A legacy of dreams and innovation.",
+    text: "The result? 23 Academy Awards. Over 28 feature films. More than 19 billion dollars at the box office. Not just a legacy. A dynasty built on dreams, guts, and innovation.",
   },
 ];
 
@@ -49,9 +49,9 @@ function generateVoiceover(sceneId: string, text: string): void {
     text,
     model_id: "eleven_multilingual_v2",
     voice_settings: {
-      stability: 0.6,
+      stability: 0.45,
       similarity_boost: 0.75,
-      style: 0.2,
+      style: 0.4,
     },
   });
 
