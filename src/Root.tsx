@@ -18,7 +18,7 @@ export const RemotionRoot: React.FC = () => {
       width={1920}
       height={1080}
       defaultProps={{
-        hasVoiceover: false,
+        hasVoiceover: true,
       }}
     />
   );
