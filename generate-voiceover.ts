@@ -6,31 +6,31 @@ const VOICE_ID = "ErXwobaYiN019PkySvjV"; // "Antoni" - confident, energetic male
 const SCENES = [
   {
     id: "01-title",
-    text: "What happens when a garage dream meets cutting-edge technology? You get the greatest animation empire the world has ever seen. This is Disney and Pixar.",
+    text: "19 billion dollars. 23 Oscars. And it all started with a man, a garage, and a mouse. This is the insane true story of Disney and Pixar. And trust me, you don't want to miss how it ends.",
   },
   {
     id: "02-walt-disney",
-    text: "1923. A young Walt Disney opens a tiny studio in a Hollywood garage. No budget. No backing. Just a wild belief that drawings could make the world feel something. And he was absolutely right.",
+    text: "1923. Walt Disney has nothing. No money. No connections. Just a tiny studio in a Hollywood garage and a crazy idea: that hand-drawn pictures could make grown adults laugh, cry, and believe in magic. Everyone told him he was out of his mind. But what he built next would change the world forever.",
   },
   {
     id: "03-pixar-origins",
-    text: "Fast forward to 1986. Steve Jobs bets big, buying Pixar from Lucasfilm's computer graphics division. A scrappy team of engineers and artists with one audacious goal: blow up everything we know about animation.",
+    text: "Now here's where it gets wild. 1986. Steve Jobs, fresh off getting fired from Apple, makes a risky bet. He buys a small computer graphics team from Lucasfilm called Pixar. Nobody takes them seriously. A bunch of nerds trying to make cartoons with computers? But they had a secret weapon that nobody saw coming.",
   },
   {
     id: "04-toy-story",
-    text: "Then 1995 hits, and everything changes. Toy Story drops as the first fully computer-animated feature film ever made. Critics love it. Audiences lose their minds. A brand new era of filmmaking is born.",
+    text: "1995. Pixar drops Toy Story. The first fully computer-animated movie ever made. And it doesn't just succeed. It explodes. 373 million dollars at the box office. Critics are speechless. Audiences are obsessed. In one single film, Pixar didn't just make a movie. They invented the future of cinema.",
   },
   {
     id: "05-golden-era",
-    text: "And they just kept winning. Finding Nemo. The Incredibles. Ratatouille. WALL-E. Up. Banger after banger. A golden era that nobody could touch.",
+    text: "And then? They went on an absolute tear. Finding Nemo. The Incredibles. Ratatouille. WALL-E. Up. Hit after hit after hit. Every single one a masterpiece. No studio in history had a run like this. But the biggest plot twist? It was still coming.",
   },
   {
     id: "06-merger",
-    text: "2006. Disney makes the power move, acquiring Pixar for seven point four billion dollars. Two animation giants, now one unstoppable force.",
+    text: "2006. Disney does the unthinkable. They acquire Pixar for seven point four billion dollars. The old guard and the rebels, now united under one roof. It was the most ambitious bet in entertainment history. And it paid off beyond anyone's wildest imagination.",
   },
   {
     id: "07-legacy",
-    text: "The result? 23 Academy Awards. Over 28 feature films. More than 19 billion dollars at the box office. Not just a legacy. A dynasty built on dreams, guts, and innovation.",
+    text: "23 Academy Awards. Over 28 feature films. More than 19 billion at the box office. From a garage in Hollywood to the most dominant force in animation history. That's not just a success story. That's a dynasty. And they're still just getting started.",
   },
 ];
 
