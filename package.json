@@ -1,0 +1,28 @@
+{
+  "name": "project-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion render DisneyPixarStory out/disney-pixar-story.mp4",
+    "render": "remotion render DisneyPixarStory out/disney-pixar-story.mp4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:62084/git/uncleweedle526/project-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/cli": "4.0.423",
+    "@remotion/transitions": "4.0.423",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "remotion": "4.0.423",
+    "typescript": "5.9.3"
+  }
+}
