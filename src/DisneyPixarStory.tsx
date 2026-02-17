@@ -10,10 +10,14 @@ import { Audio } from "@remotion/media";
 import {
   TransitionSeries,
   linearTiming,
+  springTiming,
 } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
+import { flip } from "@remotion/transitions/flip";
+// clockWipe has a path-parsing bug in this version, using wipe instead
+import { LightLeak } from "@remotion/light-leaks";
 
 import { TitleScene } from "./scenes/TitleScene";
 import { WaltDisneyScene } from "./scenes/WaltDisneyScene";
@@ -87,10 +91,10 @@ export const DisneyPixarStory: React.FC<DisneyPixarStoryProps> = ({
           <WaltDisneyScene />
         </TransitionSeries.Sequence>
 
-        <TransitionSeries.Transition
-          presentation={slide({ direction: "from-right" })}
-          timing={linearTiming({ durationInFrames: transitionDuration })}
-        />
+        {/* Light leak overlay between scenes 2 and 3 */}
+        <TransitionSeries.Overlay durationInFrames={Math.round(fps * 0.8)}>
+          <LightLeak seed={3} hueShift={40} />
+        </TransitionSeries.Overlay>
 
         {/* Scene 3: Pixar Origins (8.5-13s) */}
         <TransitionSeries.Sequence durationInFrames={Math.round(fps * 4.5)}>
@@ -98,7 +102,7 @@ export const DisneyPixarStory: React.FC<DisneyPixarStoryProps> = ({
         </TransitionSeries.Sequence>
 
         <TransitionSeries.Transition
-          presentation={wipe()}
+          presentation={wipe({ direction: "from-left" })}
           timing={linearTiming({ durationInFrames: transitionDuration })}
         />
 
@@ -108,8 +112,8 @@ export const DisneyPixarStory: React.FC<DisneyPixarStoryProps> = ({
         </TransitionSeries.Sequence>
 
         <TransitionSeries.Transition
-          presentation={fade()}
-          timing={linearTiming({ durationInFrames: transitionDuration })}
+          presentation={flip()}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: transitionDuration })}
         />
 
         {/* Scene 5: Golden Era (17.5-22s) */}
@@ -117,10 +121,10 @@ export const DisneyPixarStory: React.FC<DisneyPixarStoryProps> = ({
           <GoldenEraScene />
         </TransitionSeries.Sequence>
 
-        <TransitionSeries.Transition
-          presentation={slide({ direction: "from-left" })}
-          timing={linearTiming({ durationInFrames: transitionDuration })}
-        />
+        {/* Light leak overlay between scenes 5 and 6 */}
+        <TransitionSeries.Overlay durationInFrames={Math.round(fps * 0.8)}>
+          <LightLeak seed={7} hueShift={240} />
+        </TransitionSeries.Overlay>
 
         {/* Scene 6: The Merger (22-26s) */}
         <TransitionSeries.Sequence durationInFrames={Math.round(fps * 4)}>

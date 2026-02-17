@@ -5,7 +5,14 @@ import {
   useVideoConfig,
   interpolate,
   spring,
+  Easing,
 } from "remotion";
+
+const STATS = [
+  { label: "Academy Awards", value: 23, suffix: "", color: "#FFD700" },
+  { label: "Feature Films", value: 28, suffix: "+", color: "#87CEEB" },
+  { label: "Box Office Revenue", value: 19, suffix: "B+", prefix: "$", color: "#64ffda" },
+];
 
 export const LegacyScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -17,34 +24,56 @@ export const LegacyScene: React.FC = () => {
     config: { damping: 12, stiffness: 80 },
   });
 
-  const subtitleOpacity = interpolate(frame, [fps * 0.8, fps * 1.5], [0, 1], {
+  const subtitleOpacity = interpolate(frame, [fps * 0.6, fps * 1.2], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const subtitleY = interpolate(frame, [fps * 0.6, fps * 1.2], [30, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
 
-  const subtitleY = interpolate(frame, [fps * 0.8, fps * 1.5], [30, 0], {
+  // Counting stats animation
+  const statsAppear = interpolate(frame, [fps * 1.2, fps * 1.8], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-
-  const statsOpacity = interpolate(frame, [fps * 1.5, fps * 2.2], [0, 1], {
+  const countProgress = interpolate(frame, [fps * 1.2, fps * 2.5], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
   });
 
-  // Sparkle particles
-  const sparkles = Array.from({ length: 30 }, (_, i) => {
-    const angle = (i / 30) * Math.PI * 2;
-    const radius = 200 + Math.sin(i * 2.5) * 100;
-    const speed = 0.02 + (i % 5) * 0.005;
-    const x = 50 + Math.cos(angle + frame * speed) * (radius / 19.2);
-    const y = 50 + Math.sin(angle + frame * speed) * (radius / 10.8);
+  // Multi-layer sparkles with varying sizes and colors
+  const sparkles = Array.from({ length: 50 }, (_, i) => {
+    const layer = i % 3;
+    const angle = (i / 50) * Math.PI * 2;
+    const baseRadius = 150 + layer * 80 + Math.sin(i * 2.5) * 50;
+    const speed = 0.015 + layer * 0.008;
+    const x = 50 + Math.cos(angle + frame * speed) * (baseRadius / 19.2);
+    const y = 50 + Math.sin(angle + frame * speed) * (baseRadius / 10.8);
     const sparkleOpacity = interpolate(
-      Math.sin(frame * 0.1 + i),
+      Math.sin(frame * 0.08 + i * 0.7),
       [-1, 1],
-      [0.1, 0.8]
+      [0.05, layer === 2 ? 0.9 : 0.5]
     );
-    return { x, y, opacity: sparkleOpacity, size: 3 + (i % 3) };
+    const size = layer === 0 ? 2 : layer === 1 ? 3.5 : 5;
+    const colors = ["#FFD700", "#FFA500", "#87CEEB", "#64ffda", "#FF6347"];
+    const color = colors[i % colors.length];
+    return { x, y, opacity: sparkleOpacity, size, color };
+  });
+
+  // Expanding rings
+  const rings = [0, 1, 2].map((i) => {
+    const ringDelay = fps * 0.5 + i * Math.round(fps * 0.4);
+    const ringProgress = interpolate(frame - ringDelay, [0, fps * 2], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    });
+    const radius = interpolate(ringProgress, [0, 1], [0, 400 + i * 120]);
+    const opacity = interpolate(ringProgress, [0, 0.2, 1], [0, 0.2, 0]);
+    return { radius, opacity };
   });
 
   // Fade out at the end
@@ -53,16 +82,42 @@ export const LegacyScene: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
+  // Background gradient rotation
+  const bgAngle = interpolate(frame, [0, fps * 4], [0, 15]);
+
+  // Animated gold line under title
+  const lineWidth = interpolate(frame, [fps * 0.3, fps * 0.9], [0, 400], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+
   return (
     <AbsoluteFill
       style={{
-        background: "radial-gradient(ellipse at center, #1a1a4e 0%, #0a0a1a 80%)",
+        background: `conic-gradient(from ${bgAngle}deg at 50% 50%, #1a1a4e 0%, #0f0f35 25%, #1a1a4e 50%, #0a0a1a 75%, #1a1a4e 100%)`,
         justifyContent: "center",
         alignItems: "center",
         opacity: endFade,
+        overflow: "hidden",
       }}
     >
-      {/* Sparkles */}
+      {/* Expanding rings */}
+      {rings.map((ring, i) => (
+        <div
+          key={`ring-${i}`}
+          style={{
+            position: "absolute",
+            width: ring.radius * 2,
+            height: ring.radius * 2,
+            borderRadius: "50%",
+            border: "1.5px solid rgba(255, 215, 0, 0.3)",
+            opacity: ring.opacity,
+          }}
+        />
+      ))}
+
+      {/* Multi-layer sparkles */}
       {sparkles.map((s, i) => (
         <div
           key={i}
@@ -73,9 +128,9 @@ export const LegacyScene: React.FC = () => {
             width: s.size,
             height: s.size,
             borderRadius: "50%",
-            backgroundColor: "#FFD700",
+            backgroundColor: s.color,
             opacity: s.opacity,
-            boxShadow: "0 0 6px rgba(255, 215, 0, 0.5)",
+            boxShadow: `0 0 ${s.size * 2}px ${s.color}`,
           }}
         />
       ))}
@@ -93,12 +148,16 @@ export const LegacyScene: React.FC = () => {
             fontSize: 80,
             fontWeight: 900,
             fontFamily: "Georgia, serif",
-            background: "linear-gradient(135deg, #FFD700, #FFA500, #FF6347, #FFD700)",
+            background:
+              "linear-gradient(135deg, #FFD700, #FFA500, #FF6347, #FFA500, #FFD700)",
+            backgroundSize: "200% 200%",
+            backgroundPosition: `${interpolate(frame, [0, fps * 4], [0, 100])}% 50%`,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             textAlign: "center",
             transform: `scale(${titleSpring})`,
             lineHeight: 1.2,
+            filter: "drop-shadow(0 0 25px rgba(255, 215, 0, 0.3))",
           }}
         >
           A Legacy of
@@ -106,11 +165,23 @@ export const LegacyScene: React.FC = () => {
           Dreams & Innovation
         </div>
 
+        {/* Animated gold line */}
+        <div
+          style={{
+            width: lineWidth,
+            height: 2,
+            background:
+              "linear-gradient(90deg, transparent, #FFD700, #FFA500, #FFD700, transparent)",
+            marginTop: 15,
+            borderRadius: 1,
+          }}
+        />
+
         <div
           style={{
             fontSize: 30,
             color: "#a0c4ff",
-            marginTop: 30,
+            marginTop: 25,
             opacity: subtitleOpacity,
             transform: `translateY(${subtitleY}px)`,
             textAlign: "center",
@@ -127,45 +198,65 @@ export const LegacyScene: React.FC = () => {
             display: "flex",
             gap: 80,
             marginTop: 50,
-            opacity: statsOpacity,
+            opacity: statsAppear,
           }}
         >
-          {[
-            { label: "Academy Awards", value: "23" },
-            { label: "Feature Films", value: "28+" },
-            { label: "Billions in Revenue", value: "$19B+" },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
+          {STATS.map((stat, i) => {
+            // Staggered card entrance
+            const cardSpring = spring({
+              frame: frame - Math.round(fps * 1.3) - i * 5,
+              fps,
+              config: { damping: 14, stiffness: 100 },
+            });
+            const cardScale = Math.max(0, cardSpring);
+
+            // Counting number
+            const currentValue = Math.round(stat.value * countProgress);
+
+            // Pulsing glow per stat
+            const statGlow = interpolate(
+              Math.sin(frame * 0.1 + i * 2),
+              [-1, 1],
+              [0.2, 0.5]
+            );
+
+            return (
               <div
+                key={i}
                 style={{
-                  fontSize: 56,
-                  fontWeight: 900,
-                  color: "#FFD700",
-                  fontFamily: "Georgia, serif",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  transform: `scale(${cardScale})`,
                 }}
               >
-                {stat.value}
+                <div
+                  style={{
+                    fontSize: 56,
+                    fontWeight: 900,
+                    color: stat.color,
+                    fontFamily: "Georgia, serif",
+                    textShadow: `0 0 20px rgba(255, 215, 0, ${statGlow})`,
+                  }}
+                >
+                  {stat.prefix || ""}
+                  {currentValue}
+                  {stat.suffix}
+                </div>
+                <div
+                  style={{
+                    fontSize: 20,
+                    color: "#a0aec0",
+                    marginTop: 8,
+                    letterSpacing: 2,
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {stat.label}
+                </div>
               </div>
-              <div
-                style={{
-                  fontSize: 20,
-                  color: "#a0aec0",
-                  marginTop: 8,
-                  letterSpacing: 2,
-                  textTransform: "uppercase",
-                }}
-              >
-                {stat.label}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </AbsoluteFill>
